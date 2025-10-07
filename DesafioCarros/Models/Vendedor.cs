@@ -6,7 +6,7 @@ namespace DesafioCarros.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public DataSetDateTime DataAdmissao { get; set; }
+        public DateTime DataAdmissao { get; set; }
         public string Matricula { get; set; }
 
         public double Salary { get; set; }

@@ -10,11 +10,11 @@
         public DateTime Garantia { get; set; }
 
         public double ValorVenda { get; set; }
-
+        public int ClienteId { get; set; }
         public Cliente cliente { get; set; }
-
+        public int VendedorId { get; set; }
         public Vendedor vendedor { get; set; }
-
+        public int CarroId { get; set; }
         public Carro carro { get; set; }
     }
 }
