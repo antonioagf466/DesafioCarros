@@ -1,10 +1,10 @@
-﻿@model DesafioCarros.Models.Nota
+﻿@model DesafioCarros.Models.ViewModel.NotaViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Criando Nota";
 }
 
-<h1>Create</h1>
+<h1>@ViewData["Title"]</h1>
 
 <h4>Nota</h4>
 <hr />
@@ -13,36 +13,36 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
-                <span asp-validation-for="Numero" class="text-danger"></span>
+                <label asp-for="Nota.Numero" class="control-label"></label>
+                <input asp-for="Nota.Numero" class="form-control" />
+                <span asp-validation-for="Nota.Numero" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DataEmissao" class="control-label"></label>
-                <input asp-for="DataEmissao" class="form-control" />
-                <span asp-validation-for="DataEmissao" class="text-danger"></span>
+                <label asp-for="Nota.DataEmissao" class="control-label"></label>
+                <input asp-for="Nota.DataEmissao" class="form-control" />
+                <span asp-validation-for="Nota.DataEmissao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Garantia" class="control-label"></label>
-                <input asp-for="Garantia" class="form-control" />
-                <span asp-validation-for="Garantia" class="text-danger"></span>
+                <label asp-for="Nota.Garantia" class="control-label"></label>
+                <input asp-for="Nota.Garantia" class="form-control" />
+                <span asp-validation-for="Nota.Garantia" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ValorVenda" class="control-label"></label>
-                <input asp-for="ValorVenda" class="form-control" />
-                <span asp-validation-for="ValorVenda" class="text-danger"></span>
+                <label asp-for="Nota.ValorVenda" class="control-label"></label>
+                <input asp-for="Nota.ValorVenda" class="form-control" />
+                <span asp-validation-for="Nota.ValorVenda" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ClienteId" class="control-label"></label>
-                <select asp-for="ClienteId" class ="form-control" asp-items="ViewBag.ClienteId"></select>
+                <label asp-for="Nota.ClienteId" class="control-label"></label>
+                <select asp-for="Nota.ClienteId" class="form-control" asp-items="@(new SelectList(Model.Clientes, "Id", "Name"))"></select>
             </div>
             <div class="form-group">
-                <label asp-for="VendedorId" class="control-label"></label>
-                <select asp-for="VendedorId" class ="form-control" asp-items="ViewBag.VendedorId"></select>
+                <label asp-for="Nota.VendedorId" class="control-label"></label>
+                <select asp-for="Nota.VendedorId" class="form-control" asp-items="@(new SelectList(Model.Vendedores, "Id", "Name"))"></select>
             </div>
             <div class="form-group">
-                <label asp-for="CarroId" class="control-label"></label>
-                <select asp-for="CarroId" class ="form-control" asp-items="ViewBag.CarroId"></select>
+                <label asp-for="Nota.CarroId" class="control-label"></label>
+                <select asp-for="Nota.CarroId" class="form-control" asp-items="@(new SelectList(Model.Carros,"Id", "Marca"))"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DesafioCarros.Data;
+using DesafioCarros.Models;
+using DesafioCarros.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using DesafioCarros.Data;
-using DesafioCarros.Models;
+using NuGet.Protocol.Plugins;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DesafioCarros.Controllers
 {
@@ -48,89 +50,69 @@ namespace DesafioCarros.Controllers
         }
 
         // GET: Notas/Create
+   
         public IActionResult Create()
         {
-            ViewData["CarroId"] = new SelectList(_context.Carro, "Id", "Id");
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id");
-            ViewData["VendedorId"] = new SelectList(_context.Vendedor, "Id", "Id");
-            return View();
+            /*Cria um objeto view model e popula a 
+             * lista de departamentos*/
+            var viewModel = new NotaViewModel();
+            viewModel.Carros = _context.Carro.ToList();
+            viewModel.Clientes = _context.Cliente.ToList();
+            viewModel.Vendedores = _context.Vendedor.ToList();
+            return View(viewModel);
         }
 
         // POST: Notas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Numero,DataEmissao,Garantia,ValorVenda,ClienteId,VendedorId,CarroId")] Nota nota)
+        public IActionResult Create(Nota nota)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(nota);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CarroId"] = new SelectList(_context.Carro, "Id", "Id", nota.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", nota.ClienteId);
-            ViewData["VendedorId"] = new SelectList(_context.Vendedor, "Id", "Id", nota.VendedorId);
-            return View(nota);
-        }
-
-        // GET: Notas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Nota == null)
-            {
-                return NotFound();
-            }
-
-            var nota = await _context.Nota.FindAsync(id);
             if (nota == null)
             {
                 return NotFound();
             }
-            ViewData["CarroId"] = new SelectList(_context.Carro, "Id", "Id", nota.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", nota.ClienteId);
-            ViewData["VendedorId"] = new SelectList(_context.Vendedor, "Id", "Id", nota.VendedorId);
-            return View(nota);
+            _context.Add(nota);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        // GET: Notas/Edit/5
+        public IActionResult Edit(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var nota = _context.Nota.First(sr => sr.Id == id);
+
+            if (nota == null)
+            {
+                return NotFound();
+            }
+
+            NotaViewModel viewModel = new NotaViewModel();
+            viewModel.Nota = nota;
+            viewModel.Carros = _context.Carro.ToList();
+            viewModel.Clientes = _context.Cliente.ToList();
+            viewModel.Vendedores = _context.Vendedor.ToList();
+
+            return View(viewModel);
         }
 
         // POST: Notas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Numero,DataEmissao,Garantia,ValorVenda,ClienteId,VendedorId,CarroId")] Nota nota)
+        public IActionResult Edit(Nota nota)
         {
-            if (id != nota.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(nota);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NotaExists(nota.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CarroId"] = new SelectList(_context.Carro, "Id", "Id", nota.CarroId);
-            ViewData["ClienteId"] = new SelectList(_context.Cliente, "Id", "Id", nota.ClienteId);
-            ViewData["VendedorId"] = new SelectList(_context.Vendedor, "Id", "Id", nota.VendedorId);
-            return View(nota);
+            _context.Update(nota);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
+
 
         // GET: Notas/Delete/5
         public async Task<IActionResult> Delete(int? id)
